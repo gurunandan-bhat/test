@@ -5,4 +5,4 @@ theme = 'default'
 
 [security]
   [security.http]
-    mediaTypes = ['^audio/[mpeg|mp3]$']
+    mediaTypes = ['^audio/mp3$']
