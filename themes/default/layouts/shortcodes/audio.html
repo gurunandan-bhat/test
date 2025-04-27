@@ -20,6 +20,7 @@
     {{- end }}
 
     {{- with $r }}
+        {{ .Publish }}
         <figure class="w-100">
             {{- with $caption }}
                 <figcaption>{{ . }}</figcaption>

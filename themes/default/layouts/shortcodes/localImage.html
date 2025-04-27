@@ -1,0 +1,11 @@
+{{ with $path := .Get "path" }}
+    {{ with resources.Get $path }}
+        {{ with images.Filter images.Grayscale . }}
+            <div><img src="{{ .RelPermalink }}" /></div>
+        {{ else }}
+            {{ errorf "Image filter failed" }}
+        {{ end }}
+    {{ else }}
+        {{ errorf "Get image failed from %s" $path }}
+    {{ end }}
+{{ end }}
