@@ -28,7 +28,7 @@
             {{- $id := printf "audio-%s" ($path | md5) }}
             <audio controls id="{{ $id }}" preload="auto">
                 <source
-                    src="{{ .RelPermalink }}"
+                    src="{{ .RelPermalink -}}?t=1"
                     type="{{ .MediaType.Type }}" />
             </audio>
         </figure>
