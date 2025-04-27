@@ -2,7 +2,8 @@
 {{- with $path := trim (.Get "path") "<>" }}
     {{- $r := "" }}
     {{- if (urls.Parse $path).IsAbs }}
-        {{- with try (resources.GetRemote $path) }}
+        {{ $key := printf "%s.mp3" ($path | md5) }}
+        {{- with try (resources.GetRemote $path (dict "key" $key)) }}
             {{- with .Err }}
                 {{- errorf "The %q shortcode was unable to get %s: %s: see %s" $.Name $path . $.Position }}
             {{- else with .Value }}
@@ -20,18 +21,19 @@
     {{- end }}
 
     {{- with $r }}
-        {{ .Publish }}
-        <figure class="w-100">
-            {{- with $caption }}
-                <figcaption>{{ . }}</figcaption>
-            {{- end }}
-            {{- $id := printf "audio-%s" ($path | md5) }}
-            <audio controls id="{{ $id }}" preload="auto">
-                <source
-                    src="{{ .RelPermalink -}}?t=1"
-                    type="{{ .MediaType.Type }}" />
-            </audio>
-        </figure>
+        {{ with resources.Copy "audio/copied.mp3" . }}
+            <figure class="w-100">
+                {{- with $caption }}
+                    <figcaption>{{ . }}</figcaption>
+                {{- end }}
+                {{- $id := printf "audio-%s" ($path | md5) }}
+                <audio controls id="{{ $id }}" preload="auto">
+                    <source
+                        src="{{ .RelPermalink -}}?t=1"
+                        type="{{ .MediaType.Type }}" />
+                </audio>
+            </figure>
+        {{ end }}
     {{- end }}
 {{- else }}
     {{- errorf "The %q shortcode requires a path argument: see %s" .Name .Position }}
